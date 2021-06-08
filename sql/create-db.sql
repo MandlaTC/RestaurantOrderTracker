@@ -7,16 +7,15 @@ CREATE TABLE USERS (
     username VARCHAR(255),
     email VARCHAR (255),
     userType VARCHAR (36),
-    password VARCHAR (255)
+    userPass VARCHAR (255)
 );
 
-alter table
-    users
-ADD
-    column userType varchar(36)
-after
-    userPass;
-
+/* alter table
+ users
+ ADD
+ column userType varchar(36)
+ after
+ userPass; */
 CREATE TABLE USER_TYPE (
     userID VARCHAR(36) NOT NULL PRIMARY KEY,
     userType VARCHAR (36),
@@ -41,13 +40,13 @@ CREATE TABLE ORDERS(
     FOREIGN KEY (restaurantID) REFERENCES RESTAURANT(restaurantID)
 );
 
-CREATE TABLE ORDERSTATUS(
+CREATE TABLE ORDER_STATUS(
     orderID VARCHAR(36) NOT NULL PRIMARY KEY,
     orderStatus VARCHAR (255),
     FOREIGN KEY (orderID) REFERENCES ORDERS(orderID)
 );
 
-CREATE TABLE ORDERRATING(
+CREATE TABLE ORDER_RATING(
     orderID VARCHAR(36) NOT NULL PRIMARY KEY,
     rating VARCHAR (255),
     FOREIGN KEY (orderID) REFERENCES ORDERS(orderID)
