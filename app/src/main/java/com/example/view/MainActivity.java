@@ -1,16 +1,15 @@
-package com.example.testrequests;
+package com.example.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ProgressBar;
+
+import com.example.testrequests.R;
 
 public class MainActivity extends AppCompatActivity {
 

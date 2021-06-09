@@ -1,9 +1,11 @@
-package com.example.testrequests;
+package com.example.view;
 
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.testrequests.R;
 
 public class HomePageActivity extends AppCompatActivity{
 
