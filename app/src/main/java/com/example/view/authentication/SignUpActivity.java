@@ -1,4 +1,4 @@
-package com.example.view;
+package com.example.view.authentication;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.app.Navigator;
 import com.example.data_models.User;
+import com.example.model.AuthRepository;
 import com.example.testrequests.R;
 
 import org.json.JSONException;
@@ -52,8 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Creating the ArrayAdapter instance having the country list
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("Staff");
-        arrayList.add("User");
+        arrayList.add(User.staffUserType);
+        arrayList.add(User.customerUserType);
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -66,13 +68,14 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tutorialsName = parent.getItemAtPosition(position).toString();
-               aa.notifyDataSetChanged();
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName, Toast.LENGTH_LONG).show();
-
+                parent.setSelection(position);
+                aa.notifyDataSetChanged();
+                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(parent.getContext(), "Please select a valid user type", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -170,9 +173,8 @@ public class SignUpActivity extends AppCompatActivity {
                         JSONObject userData = new JSONObject(userDataString);
                         User user = User.fromMap(userData);
                         if (user != null) {
-                            System.out.println(user.toString());
-                            User.storeUser(context, user);
-                            navigateToHomePage(view);
+                            AuthRepository.storeUser(context, user);
+                            Navigator.handleUserBasedNavigation(context, user);
                         }
                     } else {
                         setButtonLoadingText(false);
@@ -197,11 +199,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    // Navigation methods for moving between UI views
-    public void navigateToHomePage(View view) {
-        Intent intent = new Intent(this, HomePageActivity.class);
-        startActivity(intent);
-    }
 
     // Navigation methods for moving between UI views
     public void navigateToLogin(View view) {

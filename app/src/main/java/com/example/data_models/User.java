@@ -14,6 +14,8 @@ public class User {
     public String name;
     public String email;
     public String userType;
+    public static String staffUserType = "Staff";
+    public static String customerUserType = "Customer";
 
     @Override
     public String toString() {
@@ -32,7 +34,7 @@ public class User {
         this.userType = userType;
     }
 
-    public static User fromMap( JSONObject data) {
+    public static User fromMap(JSONObject data) {
         try {
             String userId = data.getString("userId");
             String username = data.getString("username");
@@ -47,23 +49,8 @@ public class User {
 
     }
 
-    public static void storeUser(Context context, User user) {
-        //preference file name
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", 0);
-        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(user);
-        sharedPreferencesEditor.putString("user", json);
-        sharedPreferencesEditor.commit();
-    }
 
-    public static User getSavedUserFromPreference(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user", 0);
-        if (sharedPreferences.contains("user")) {
-            final Gson gson = new Gson();
-            return gson.fromJson(sharedPreferences.getString("user", ""), User.class);
-        }
-        return null;
-    }
+
+
 }
 

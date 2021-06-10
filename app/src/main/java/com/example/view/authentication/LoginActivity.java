@@ -1,18 +1,17 @@
-package com.example.view;
+package com.example.view.authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.app.Navigator;
 import com.example.data_models.User;
+import com.example.model.AuthRepository;
 import com.example.testrequests.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,14 +32,13 @@ public class LoginActivity extends AppCompatActivity {
     View view;
     TextView loginButton;
     TextView errorTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
         view = new View(this);
-        context = getApplicationContext();
-        EditText usernameEditText = findViewById(R.id.username_edit_text);
-        EditText passwordEditText = findViewById(R.id.password_edit_text);
+        context = this;
         loginButton = findViewById(R.id.loginButton);
         errorTextView = findViewById(R.id.loginErrorTextView);
         errorTextView.setText("");
@@ -51,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginRequest(view, context);
+                loginRequest();
             }
         });
     }
@@ -70,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
      * On success perform navigateToHomePage(View view)
      **/
 
-    public void loginRequest(View view, Context context) {
+    public void loginRequest() {
         try {
             setButtonLoadingText(true);
             errorTextView.setTextColor(Color.RED);
@@ -125,9 +123,8 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject userData = new JSONObject(userDataString);
                             User user = User.fromMap(userData);
                             if (user != null) {
-                                System.out.println(user.toString());
-                                User.storeUser(context, user);
-                                navigateToHomePage(view);
+                                AuthRepository.storeUser(context, user);
+                                Navigator.handleUserBasedNavigation(context, user);
                             }
                         } else {
                             setButtonLoadingText(false);
@@ -149,6 +146,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
+            errorTextView.setText(e.getMessage());
+            return;
+
         }
 
     }
@@ -162,12 +162,6 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    // Navigation methods for moving between UI views
-    public void navigateToHomePage(View view) {
-        Intent intent = new Intent(this, HomePageActivity.class);
-        startActivity(intent);
     }
 
     // Navigation methods for moving between UI views

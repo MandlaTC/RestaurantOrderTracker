@@ -1,4 +1,4 @@
-package com.example.testrequests;
+package com.example.utils;
 
 import android.app.Activity;
 import android.os.Build;
