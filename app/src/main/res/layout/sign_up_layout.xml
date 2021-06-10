@@ -93,15 +93,33 @@
                 android:padding="5dp"
                 android:text="Please select user type: " />
 
-            <Spinner
-                android:id="@+id/user_type_spinner"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:padding="100dp"
-                android:spinnerMode="dropdown"
-                android:visibility="visible" />
+                android:layout_marginRight="3dp"
+                android:layout_weight=".28"
+                android:background="@drawable/user_type_spinner_drawable"
+                android:orientation="horizontal">
 
+                <Spinner
+                    android:id="@+id/user_type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:spinnerMode="dropdown" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/dropdown_arrow" />
+
+            </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

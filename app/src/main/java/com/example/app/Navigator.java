@@ -14,7 +14,7 @@ public class Navigator {
         Intent intent;
         if (user == null) {
             intent = new Intent(context, LoginActivity.class);
-        } else if (user.userType == User.customerUserType) {
+        } else if (user.userType.equals(User.customerUserType)) {
             intent = new Intent(context, CustomerHomeActivity.class);
 
         } else {

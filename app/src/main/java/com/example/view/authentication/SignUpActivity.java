@@ -33,7 +33,8 @@ public class SignUpActivity extends AppCompatActivity {
     TextView errorTextView;
     Context context;
     TextView signUpButton;
-
+    Spinner userTypeSpinner;
+    public static String  firstSpinnerString = "Please select customer or staff";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,27 +51,27 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void initSpinner() {
-        Spinner userType = (Spinner) findViewById(R.id.user_type_spinner);
+        userTypeSpinner = (Spinner) findViewById(R.id.user_type_spinner);
 
         //Creating the ArrayAdapter instance having the country list
         ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add(firstSpinnerString);
         arrayList.add(User.staffUserType);
         arrayList.add(User.customerUserType);
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayList);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //Setting the ArrayAdapter data on the Spinner
-        userType.setAdapter(aa);
+        userTypeSpinner.setAdapter(aa);
 
         // Upon selection small popup to confirm selection
 
-        userType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        userTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tutorialsName = parent.getItemAtPosition(position).toString();
                 parent.setSelection(position);
                 aa.notifyDataSetChanged();
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -111,7 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
         if (email.isEmpty()) {
             return false;
         }
-        if (userType.isEmpty()) {
+        if (userType.equals(firstSpinnerString)) {
             return false;
         }
         return true;
@@ -128,8 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
         String email = t.getText().toString();
         t = (TextView) findViewById(R.id.password_edit_text);
         String password = t.getText().toString();
-        Spinner s = (Spinner) findViewById(R.id.user_type_spinner);
-        String userType = s.getSelectedItem().toString();
+        String userType = userTypeSpinner.getSelectedItem().toString();
         if (!validateInputs(username, password, email, userType)) {
             errorTextView.setText("Missing fields for either username, password, email, or usertype");
             return;
