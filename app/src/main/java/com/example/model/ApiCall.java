@@ -64,4 +64,14 @@ public class ApiCall {
         ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
 
     }
+
+    public static void getStaffOrders(Context ctx, String staffID, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/staff.php?rType=staffOrders");
+        url.append("&staff=" + staffID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
 }
