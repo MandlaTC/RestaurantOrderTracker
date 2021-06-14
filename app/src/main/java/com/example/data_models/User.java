@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class User {
     public String id;
     public String name;
@@ -36,20 +38,25 @@ public class User {
 
     public static User fromMap(JSONObject data) {
         try {
-            String userId = data.getString("userId");
+            String userId = data.getString("userID");
             String username = data.getString("username");
             String email = data.getString("email");
             String userType = data.getString("userType");
             return new User(
                     userId, username, email, userType);
         } catch (JSONException e) {
+            System.out.println(e.getMessage());
             return null;
 
         }
 
     }
 
+    public static ArrayList<User> getUserArrayFromStringedJsonData(String data) {
+        System.out.println("in user class, data: " + data);
 
+        return new ArrayList<>();
+    }
 
 
 }

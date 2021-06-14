@@ -1,10 +1,19 @@
 package com.example.view.staff_fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,23 +21,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.app.Navigator;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.adapters.AutoSuggestAdapter;
 import com.example.data_models.User;
-import com.example.model.Api;
+import com.example.model.ApiCall;
 import com.example.model.AuthRepository;
 import com.example.testrequests.R;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,24 +59,20 @@ public class AddOrderFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     EditText itemDescriptionsEditText;
-    EditText customerEditText;
-    private boolean isLoading;
     TextView submitButton;
     TextView successTextView;
+    private RequestQueue requestQueue;
+    private static final int TRIGGER_AUTO_COMPLETE = 100;
+    private static final long AUTO_COMPLETE_DELAY = 300;
+    private Handler handler;
+    private AutoSuggestAdapter autoSuggestAdapter;
+    private User selectedCustomer;
+    AutoCompleteTextView autoCompleteTextView;
 
     public AddOrderFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddOrderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AddOrderFragment newInstance(String param1, String param2) {
         AddOrderFragment fragment = new AddOrderFragment();
         Bundle args = new Bundle();
@@ -89,21 +98,126 @@ public class AddOrderFragment extends Fragment {
     }
 
     public void initViewItems() {
-        customerEditText = getView().findViewById(R.id.add_order_customer_input_edit_text);
+        requestQueue = Volley.newRequestQueue(getContext());
         itemDescriptionsEditText = getView().findViewById(R.id.add_order_item_description_edit_text);
         submitButton = getView().findViewById(R.id.submit_order_button);
         successTextView = getView().findViewById(R.id.add_order_success_textview);
         setSubmitButtonLoading(false);
+        initAutocompleteTextField();
+    }
+
+    private void initAutocompleteTextField() {//Autocomplete text view items
+        autoCompleteTextView =
+                getView().findViewById(R.id.auto_complete_edit_text);
+        //Setting up the adapter for AutoSuggest
+        autoSuggestAdapter = new AutoSuggestAdapter(getContext(),
+                android.R.layout.simple_dropdown_item_1line);
+        autoCompleteTextView.setThreshold(2);
+        autoCompleteTextView.setAdapter(autoSuggestAdapter);
+        autoCompleteTextView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        selectedCustomer = autoSuggestAdapter.getObject(position);
+                    }
+                });
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int
+                    count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                handler.removeMessages(TRIGGER_AUTO_COMPLETE);
+                handler.sendEmptyMessageDelayed(TRIGGER_AUTO_COMPLETE,
+                        AUTO_COMPLETE_DELAY);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg.what == TRIGGER_AUTO_COMPLETE) {
+                    if (!TextUtils.isEmpty(autoCompleteTextView.getText())) {
+                        makeCustomerNameAutocompleteAPICall(autoCompleteTextView.getText().toString());
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    private void makeCustomerNameAutocompleteAPICall(String text) {
+        ApiCall.getCustomerFromName(getContext(), text, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //parsing logic, please change it as per your requirement
+                List<User> userList = new ArrayList<>();
+                try {
+                    JSONArray array = new JSONArray(response);
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject jsonUser = array.getJSONObject(i);
+                        User user = User.fromMap(jsonUser);
+                        userList.add(user);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //IMPORTANT: set data here and notify
+                autoSuggestAdapter.setData(userList);
+                autoSuggestAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+    }
+
+    private void makeNewOrderAPICall(String staffUsername, String customerUsername, String itemDescriptions) {
+        ApiCall.addNewOrder(getContext(), staffUsername, customerUsername, itemDescriptions, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //parsing logic, please change it as per your requirement
+                try {
+                    if (response.contains("Failure")) {
+                        successTextView.setText("Failed to add new order, try again later");
+                        successTextView.setTextColor(Color.RED);
+                    } else {
+                        successTextView.setText("succesfully added order");
+                    }
+
+                } catch (Exception e) {
+                    successTextView.setText("Failed to add new order, try again later");
+                    successTextView.setTextColor(Color.RED);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                successTextView.setText("Failed to add new order, try again later");
+                successTextView.setTextColor(Color.RED);
+            }
+        });
     }
 
     public void submitOrder() {
         setSubmitButtonLoading(true);
         String itemDescription = itemDescriptionsEditText.getText().toString();
-        String customerName = customerEditText.getText().toString();
-        Api api = new Api();
-        if (validateInputs(itemDescription, customerName)) {
+        if (validateInputs(itemDescription, selectedCustomer)) {
             String staffId = getUserObject().name;
-            handleNetworkRequest(customerName, staffId, itemDescription);
+            makeNewOrderAPICall(staffId, selectedCustomer.name, itemDescription);
+            itemDescriptionsEditText.getText().clear();
+            selectedCustomer = null;
+            autoSuggestAdapter.clear();
+            autoCompleteTextView.getText().clear();
+            setSubmitButtonLoading(false);
         } else {
             successTextView.setText("Missing values");
             setSubmitButtonLoading(false);
@@ -111,53 +225,6 @@ public class AddOrderFragment extends Fragment {
         }
     }
 
-    public void handleNetworkRequest(String customer, String staffName, String itemDescriptions) {
-        OkHttpClient client = new OkHttpClient();
-        String baseUrl = "https://lamp.ms.wits.ac.za/home/s2303145/new-order.php";
-        // Creating request object, username, password, email, userType parsed into request
-        Request request = new Request.Builder()
-                .url(baseUrl +
-                        "?customer" + customer
-                        + "&staff" + staffName + "&item" + itemDescriptions).build();
-        ;
-
-        // Client object method newCall called assyncronously
-        client.newCall(request).enqueue(new Callback() {
-
-            // On failure print error to the signUpText Text view
-            // TODO: comment out contents of onFailure method
-            @Override
-            public void onFailure(Call call, IOException e) {
-                successTextView.setText("Failed to add items, try again later");
-                setSubmitButtonLoading(false);
-                return;
-
-                /*getView().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        errorTextView.setText("Failed to get call the server, try again later");
-                        setButtonLoadingText(false);
-                        return;
-                    }
-                });*/
-            }
-
-            /*
-             * On response the system print response data, and using UI thread navigateToHomePage()
-             * method is called
-             */
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                String jsonResponseData = response.body().string();
-                //Attempt to do jsonResponsedata depednign on if request is succesful
-                successTextView.setText("Added new item succesfully");
-                setSubmitButtonLoading(false);
-                return;
-
-
-            }
-        });
-    }
 
     public void setSubmitButtonLoading(boolean isLoading) {
         if (isLoading) {
@@ -178,11 +245,11 @@ public class AddOrderFragment extends Fragment {
         return AuthRepository.getSavedUserFromPreference(getView().getContext());
     }
 
-    public boolean validateInputs(String itemDescription, String username) {
+    public boolean validateInputs(String itemDescription, User selectedCustomerObject) {
         if (itemDescription.isEmpty()) {
             return false;
         }
-        if (username.isEmpty()) {
+        if (selectedCustomerObject == null) {
             return false;
         }
         return true;
