@@ -4,12 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app.DateFormatter;
 import com.example.data_models.Order;
 import com.example.testrequests.R;
 
@@ -23,6 +25,14 @@ import java.util.List;
 public class StaffOrderAdapter extends
         RecyclerView.Adapter<StaffOrderAdapter.ViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mListener) {
+        this.mListener = mListener;
+    }
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
@@ -44,10 +54,22 @@ public class StaffOrderAdapter extends
             createdAtTextView = itemView.findViewById(R.id.order_layout_createdAt);
             orderStatusTextView = itemView.findViewById(R.id.order_layout_order_status);
             changeOrderStatusButton = itemView.findViewById(R.id.order_layout_change_order_status);
+            changeOrderStatusButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
     private List<Order> orders;
+    private OnItemClickListener mListener;
 
     public StaffOrderAdapter(List<Order> orders) {
         this.orders = orders;
@@ -73,7 +95,7 @@ public class StaffOrderAdapter extends
         Order order = orders.get(position);
         System.out.println("adapter customer name: " + order.getCustomerName());
         holder.customerNameTextView.setText(order.getCustomerName());
-        holder.createdAtTextView.setText(order.getOrderCreatedAt().toString());
+        holder.createdAtTextView.setText(DateFormatter.formattedDate(order.getOrderCreatedAt()));
         holder.orderStatusTextView.setText(order.getOrderStatus());
     }
 

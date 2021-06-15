@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
 
             }
-            String url = "https://lamp.ms.wits.ac.za/home/s2303145/index.php?username=" + username + "&password=" + password;
+            String url = "https://lamp.ms.wits.ac.za/home/s2303145/authentication.php?username=" + username + "&password=" + password;
             // Request object with username and password passed through into url
             Request request = new Request.Builder().url(url)
                     .build();
@@ -116,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     String jsonResponseData = response.body().string();
                     try {
                         JSONObject data = new JSONObject(jsonResponseData);
+                        System.out.println(data);
                         int success = data.getInt("success");
                         if (success == 1) {
                             //store user object
@@ -125,6 +126,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (user != null) {
                                 AuthRepository.storeUser(context, user);
                                 Navigator.handleUserBasedNavigation(context, user);
+                            } else {
+                                setButtonLoadingText(false);
+                                errorTextView.setText("error, try again later");
                             }
                         } else {
                             setButtonLoadingText(false);
@@ -133,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                     } catch (JSONException e) {
+                        setButtonLoadingText(false);
                         System.out.println(e.getMessage());
                         errorTextView.setText("Technical error, try again later.");
 

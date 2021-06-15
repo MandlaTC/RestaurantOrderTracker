@@ -59,6 +59,7 @@ public class AddOrderFragment extends Fragment {
     EditText itemDescriptionsEditText;
     TextView submitButton;
     TextView successTextView;
+    TextView logoutButton;
     private RequestQueue requestQueue;
     private static final int TRIGGER_AUTO_COMPLETE = 100;
     private static final long AUTO_COMPLETE_DELAY = 300;
@@ -98,6 +99,13 @@ public class AddOrderFragment extends Fragment {
         itemDescriptionsEditText = getView().findViewById(R.id.add_order_item_description_edit_text);
         submitButton = getView().findViewById(R.id.submit_order_button);
         successTextView = getView().findViewById(R.id.add_order_success_textview);
+        logoutButton = getView().findViewById(R.id.staff_logout_button);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               AuthRepository.logOutUser(getContext());
+            }
+        });
         setSubmitButtonLoading(false);
         initAutocompleteTextField();
     }

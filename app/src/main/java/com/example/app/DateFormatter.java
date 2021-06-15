@@ -14,4 +14,9 @@ public class DateFormatter {
             return new Date(2020, 01, 01);
         }
     }
+
+    public static String formattedDate(Date date) {
+        String dateToString = date.toString();
+        return dateToString.substring(0, dateToString.lastIndexOf('G') - 4);
+    }
 }
