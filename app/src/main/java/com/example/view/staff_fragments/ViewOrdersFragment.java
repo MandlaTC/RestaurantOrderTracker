@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +43,9 @@ public class ViewOrdersFragment extends Fragment {
 
     private TextView averageRatingTextView;
     private String staffId;
-    List<Order> orders;
+    List<Order> orders = new ArrayList<>();
     StaffOrderAdapter staffOrderAdapter;
-    RecyclerView recyclerView;
+    RecyclerView ordersRecyclerView;
 
     public ViewOrdersFragment() {
         // Required empty public constructor
@@ -72,18 +74,33 @@ public class ViewOrdersFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Nullable
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.view_orders_fragment, container, false);
+        ordersRecyclerView = view.findViewById(R.id.view_orders_recycler_view);
+        getStaffObject();
+        makeStaffOrdersApiCall();
+        List<Order> temp = new ArrayList<>();
+
+        return view;
+    }
+
+
     private void initViewItems() {
         averageRatingTextView = getView().findViewById(R.id.view_orders_average_rating_text_view);
+        System.out.println(staffId);
+        getStaffObject();
+        makeStaffRatingApiCall();
+    }
+
+    private void getStaffObject() {
         User staff = AuthRepository.getSavedUserFromPreference(getContext());
         staffId = staff.id;
-        System.out.println(staffId);
-        makeStaffRatingApiCall();
-        orders = new ArrayList<>();
-        recyclerView = getView().findViewById(R.id.view_orders_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        staffOrderAdapter = new StaffOrderAdapter(getContext(), this.orders);
-        makeStaffOrdersApiCall();
     }
+
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -96,7 +113,7 @@ public class ViewOrdersFragment extends Fragment {
             ApiCall.getStaffAverageRating(getContext(), staffId, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    averageRatingTextView.setText("Average Rating: " + response);
+                    averageRatingTextView.setText("Average Rating: " + "4.9");
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -110,6 +127,7 @@ public class ViewOrdersFragment extends Fragment {
     }
 
     private void makeStaffOrdersApiCall() {
+        System.out.println("in staff Api call");
         if (staffId != null) {
             ApiCall.getStaffOrders(getContext(), staffId, new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -117,19 +135,22 @@ public class ViewOrdersFragment extends Fragment {
                 public void onResponse(String response) {
                     //parsing logic, please change it as per your requirement
                     List<Order> orderList = new ArrayList<>();
+                    System.out.println("in on response");
                     try {
                         JSONArray array = new JSONArray(response);
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject jsonUser = array.getJSONObject(i);
                             Order order = Order.fromMap(jsonUser);
+                            System.out.println(order.toString());
                             orderList.add(order);
                         }
+                        staffOrderAdapter = new StaffOrderAdapter(orderList);
+                        ordersRecyclerView.setAdapter(staffOrderAdapter);
+                        ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    //IMPORTANT: set data here and notify
-                    //staffOrderAdapter.set(userList);
-                    staffOrderAdapter.notifyDataSetChanged();
+
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -138,6 +159,7 @@ public class ViewOrdersFragment extends Fragment {
                 }
             });
         } else {
+            System.out.println("staff id is nul");
             Toast.makeText(getContext(), "Missing staffID", Toast.LENGTH_SHORT);
         }
     }

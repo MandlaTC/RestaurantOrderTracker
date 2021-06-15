@@ -4,6 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.app.DateFormatter;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,23 +18,26 @@ public class Order {
     private String restaurantID;
     private String customerID;
     private String staffID;
-    private LocalDate orderCreatedAt;
+    private Date orderCreatedAt;
     private String itemDescription;
     private String orderStatus;
+    private String customerName;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static Order fromMap(JSONObject jsonUser) {
         Order order;
         try {
             String orderID = jsonUser.getString("orderID");
+            String customerName = jsonUser.getString("customerName");
             String customerID = jsonUser.getString("customerID");
             String staffID = jsonUser.getString("staffID");
             String restaurantID = jsonUser.getString("restaurantID");
             String itemDescription = jsonUser.getString("itemDescription");
-            String status = "Cooking in the kitchen";
+            String stringedDate = jsonUser.getString("orderCreatedAt");
+            Date date = DateFormatter.getDateFromString(stringedDate);
+            String orderStatus = jsonUser.getString("orderStatus");
             //TODO: Update date and order status when this is added to the endpoint
-            LocalDate date = LocalDate.now();
-            order = new Order(orderID, restaurantID, customerID, staffID, date, itemDescription, status);
+            order = new Order(orderID, restaurantID, customerID, staffID, customerName, date, itemDescription, orderStatus);
 
         } catch (JSONException e) {
             order = null;
@@ -41,6 +46,26 @@ public class Order {
         return order;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID='" + orderID + '\'' +
+                ", restaurantID='" + restaurantID + '\'' +
+                ", customerID='" + customerID + '\'' +
+                ", staffID='" + staffID + '\'' +
+                ", orderCreatedAt=" + orderCreatedAt +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                '}';
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public String getOrderID() {
         return orderID;
@@ -84,10 +109,11 @@ public class Order {
     }
 
 
-    public Order(String orderID, String restaurantID, String customerID, String staffID, LocalDate orderCreatedAt, String itemDescription, String orderStatus) {
+    public Order(String orderID, String restaurantID, String customerID, String staffID, String customerName, Date orderCreatedAt, String itemDescription, String orderStatus) {
         this.orderID = orderID;
         this.restaurantID = restaurantID;
         this.customerID = customerID;
+        this.customerName = customerName;
         this.staffID = staffID;
         this.orderCreatedAt = orderCreatedAt;
         this.itemDescription = itemDescription;
@@ -102,11 +128,11 @@ public class Order {
         this.restaurantID = restaurantID;
     }
 
-    public LocalDate getOrderCreatedAt() {
+    public Date getOrderCreatedAt() {
         return orderCreatedAt;
     }
 
-    public void setOrderCreatedAt(LocalDate orderCreatedAt) {
+    public void setOrderCreatedAt(Date orderCreatedAt) {
         this.orderCreatedAt = orderCreatedAt;
     }
 }
