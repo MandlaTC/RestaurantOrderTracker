@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_addOrder"
+        android:icon="@drawable/ic_add_order_icon_24dp"
+        android:title="Add Order" />
+    <item
+        android:id="@+id/navigation_viewOrders"
+        android:icon="@drawable/ic_view_order_icon_24dp"
+        android:title="View Orders" />
+</menu>
