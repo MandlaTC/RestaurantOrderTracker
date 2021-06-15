@@ -25,6 +25,7 @@ public class ApiCall {
         return mInstance;
     }
 
+
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
@@ -39,6 +40,14 @@ public class ApiCall {
     public static void getCustomerFromName(Context ctx, String query, Response.Listener<String>
             listener, Response.ErrorListener errorListener) {
         String url = "https://lamp.ms.wits.ac.za/home/s2303145/staff.php?rType=cusAutocomplete&username=" + query;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+    }
+
+    public static void getRestaurantAutocomplete(Context ctx, String query, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        String url = "https://lamp.ms.wits.ac.za/home/s2303145/staff.php?rType=restAutocomplete&restaurant=" + query;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 listener, errorListener);
         ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
@@ -85,4 +94,26 @@ public class ApiCall {
         ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
 
     }
+
+    public static void doesStaffHaveRestaurant(Context ctx, String staffID, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/staff.php?rType=staffHasRestaurant");
+        url.append("&staff=" + staffID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
+
+    public static void addStaffToRestaurant(Context ctx, String staffID, String restaurantID, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/staff.php?rType=updateStaffRest");
+        url.append("&staffID=" + staffID);
+        url.append("&restID=" + restaurantID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
+
 }

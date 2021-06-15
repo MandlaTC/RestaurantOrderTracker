@@ -103,7 +103,7 @@ public class AddOrderFragment extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               AuthRepository.logOutUser(getContext());
+                AuthRepository.logOutUser(getContext());
             }
         });
         setSubmitButtonLoading(false);

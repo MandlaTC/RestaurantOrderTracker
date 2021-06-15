@@ -93,10 +93,9 @@ public class StaffOrderAdapter extends
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Order order = orders.get(position);
-        System.out.println("adapter customer name: " + order.getCustomerName());
-        holder.customerNameTextView.setText(order.getCustomerName());
+        holder.customerNameTextView.setText("Order for: " +order.getCustomerName());
         holder.createdAtTextView.setText(DateFormatter.formattedDate(order.getOrderCreatedAt()));
-        holder.orderStatusTextView.setText(order.getOrderStatus());
+        holder.orderStatusTextView.setText("Status: " + order.getOrderStatus());
     }
 
     @Override

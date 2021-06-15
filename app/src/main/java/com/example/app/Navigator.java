@@ -8,6 +8,7 @@ import com.example.view.MainActivity;
 import com.example.view.authentication.LoginActivity;
 import com.example.view.home.CustomerHomeActivity;
 import com.example.view.home.StaffHomeActivity;
+import com.example.view.home.StaffLoadingActivity;
 
 public class Navigator {
     public static void handleUserBasedNavigation(Context context, User user) {
@@ -18,7 +19,7 @@ public class Navigator {
             intent = new Intent(context, CustomerHomeActivity.class);
 
         } else {
-            intent = new Intent(context, StaffHomeActivity.class);
+            intent = new Intent(context, StaffLoadingActivity.class);
         }
         context.startActivity(intent);
     }
