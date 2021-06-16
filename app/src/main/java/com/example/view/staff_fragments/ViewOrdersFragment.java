@@ -44,6 +44,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
     List<Order> orders = new ArrayList<>();
     StaffOrderAdapter staffOrderAdapter;
     RecyclerView ordersRecyclerView;
+    TextView logOutButton;
 
     public ViewOrdersFragment() {
         // Required empty public constructor
@@ -81,7 +82,6 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
         ordersRecyclerView = view.findViewById(R.id.view_orders_recycler_view);
         getStaffObject();
         makeStaffOrdersApiCall();
-        List<Order> temp = new ArrayList<>();
 
         return view;
     }
@@ -89,7 +89,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
 
     private void initViewItems() {
         averageRatingTextView = getView().findViewById(R.id.view_orders_average_rating_text_view);
-        System.out.println(staffId);
+        setLogOutButton();
         getStaffObject();
         makeStaffRatingApiCall();
     }
@@ -99,6 +99,15 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
         staffId = staff.id;
     }
 
+    private void setLogOutButton() {
+        logOutButton = getView().findViewById(R.id.view_orders_logout_button);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AuthRepository.logOutUser(getContext());
+            }
+        });
+    }
 
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -115,10 +124,15 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
                         JSONArray jsonObject = new JSONArray(response);
                         JSONObject ratingObject = jsonObject.getJSONObject(0);
                         String rating = ratingObject.getString("0");
-                        averageRatingTextView.setText("Average Rating: " + rating + "/1");
+                        if (rating == "null") {
+                            rating = "1/1";
+                        } else {
+                            rating += "/1";
+                        }
+                        averageRatingTextView.setText("Average Rating: " + rating);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        averageRatingTextView.setText("Average Rating: " + "4.9");
+                        averageRatingTextView.setText("Cannot determine rating");
                     }
                 }
             }, new Response.ErrorListener() {

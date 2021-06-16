@@ -29,13 +29,15 @@ public class Order {
         try {
             String orderID = jsonUser.getString("orderID");
             String customerName = "";
-            int rating = 0;
+            int rating = -1000;
             if (jsonUser.has("customerName")) {
                 customerName = jsonUser.getString("customerName");
             }
             if (jsonUser.has("rating")) {
                 String stringedRating = jsonUser.getString("rating");
-                rating = Integer.parseInt(stringedRating);
+                if (!stringedRating.equals("null")) {
+                    rating = Integer.parseInt(stringedRating);
+                }
             }
             String customerID = jsonUser.getString("customerID");
             String staffID = jsonUser.getString("staffID");

@@ -121,7 +121,7 @@ public class CustomerPastOrdersAdapter extends
         if (order.getRating() == 1) {
             thumbsUpDrawable.setTint(Color.GREEN);
             thumbsDownDrawable.setTint(Color.GRAY);
-        } else {
+        } else if (order.getRating()  == 0 ){
             thumbsDownDrawable.setTint(Color.RED);
             thumbsUpDrawable.setTint(Color.GRAY);
         }

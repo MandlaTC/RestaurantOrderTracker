@@ -157,7 +157,7 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
                     if (jsonResponse.has("success")) {
                         int success = jsonResponse.getInt("success");
                         if (success == 1) {
-                            Toast.makeText(getContext(), "Succesfully updated rating", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Successfully updated rating", Toast.LENGTH_SHORT).show();
 
                         } else {
                             Toast.makeText(getContext(), "Failed to update rating", Toast.LENGTH_SHORT).show();
