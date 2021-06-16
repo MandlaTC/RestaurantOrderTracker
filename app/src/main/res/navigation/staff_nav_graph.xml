@@ -7,10 +7,10 @@
     <fragment
         android:id="@+id/navigation_addOrder"
         android:label="Add order"
-        tools:layout="@layout/add_order_fragment" />
+        tools:layout="@layout/staff_add_order_fragment" />
 
     <fragment
         android:id="@+id/navigation_viewOrders"
         android:label="View orders"
-        tools:layout="@layout/view_orders_fragment" />
+        tools:layout="@layout/staff_view_orders_fragment" />
 </navigation>

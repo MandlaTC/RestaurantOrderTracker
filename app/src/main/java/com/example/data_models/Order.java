@@ -9,8 +9,6 @@ import com.example.app.DateFormatter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Date;
 
 public class Order {
@@ -22,28 +20,50 @@ public class Order {
     private String itemDescription;
     private String orderStatus;
     private String customerName;
+    private String restaurantName;
+    private int rating;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static Order fromMap(JSONObject jsonUser) {
         Order order;
         try {
             String orderID = jsonUser.getString("orderID");
-            String customerName = jsonUser.getString("customerName");
+            String customerName = "";
+            int rating = 0;
+            if (jsonUser.has("customerName")) {
+                customerName = jsonUser.getString("customerName");
+            }
+            if (jsonUser.has("rating")) {
+                String stringedRating = jsonUser.getString("rating");
+                rating = Integer.parseInt(stringedRating);
+            }
             String customerID = jsonUser.getString("customerID");
             String staffID = jsonUser.getString("staffID");
             String restaurantID = jsonUser.getString("restaurantID");
             String itemDescription = jsonUser.getString("itemDescription");
             String stringedDate = jsonUser.getString("orderCreatedAt");
+            String restaurantName = "";
+            if (jsonUser.has("restaurantName")) {
+                restaurantName = jsonUser.getString("restaurantName");
+            }
             Date date = DateFormatter.getDateFromString(stringedDate);
             String orderStatus = jsonUser.getString("orderStatus");
             //TODO: Update date and order status when this is added to the endpoint
-            order = new Order(orderID, restaurantID, customerID, staffID, customerName, date, itemDescription, orderStatus);
+            order = new Order(orderID, restaurantID, customerID, staffID, customerName, date, itemDescription, orderStatus, restaurantName, rating);
 
         } catch (JSONException e) {
             order = null;
             System.out.println(e.getMessage());
         }
         return order;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
     @Override
@@ -56,6 +76,8 @@ public class Order {
                 ", orderCreatedAt=" + orderCreatedAt +
                 ", itemDescription='" + itemDescription + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", restaurantName='" + restaurantName + '\'' +
                 '}';
     }
 
@@ -65,6 +87,14 @@ public class Order {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public String getOrderID() {
@@ -109,7 +139,7 @@ public class Order {
     }
 
 
-    public Order(String orderID, String restaurantID, String customerID, String staffID, String customerName, Date orderCreatedAt, String itemDescription, String orderStatus) {
+    public Order(String orderID, String restaurantID, String customerID, String staffID, String customerName, Date orderCreatedAt, String itemDescription, String orderStatus, String restaurantName, int rating) {
         this.orderID = orderID;
         this.restaurantID = restaurantID;
         this.customerID = customerID;
@@ -118,6 +148,8 @@ public class Order {
         this.orderCreatedAt = orderCreatedAt;
         this.itemDescription = itemDescription;
         this.orderStatus = orderStatus;
+        this.restaurantName = restaurantName;
+        this.rating = rating;
     }
 
     public String getRestaurantID() {

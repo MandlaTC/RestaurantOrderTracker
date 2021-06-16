@@ -9,20 +9,20 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:id="@+id/frameLayout"
+        android:id="@+id/customer_frame_layout"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintBottom_toTopOf="@id/customer_bottom_nav"
 
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottomNav"
-        app:layout_constraintTop_toBottomOf="@id/frameLayout"
+        android:id="@+id/customer_bottom_nav"
+        app:layout_constraintTop_toBottomOf="@id/customer_frame_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
-        app:menu="@menu/staff_bottom_nav_menu"
+        app:menu="@menu/customer_bottom_nav_menu"
         app:labelVisibilityMode="labeled"
 
         />

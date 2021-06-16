@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navigation_addOrder"
+        android:id="@+id/customer_navigation_past_orders"
         android:icon="@drawable/ic_add_order_icon_24dp"
-        android:title="Add Order" />
+        android:title="Past Orders" />
     <item
-        android:id="@+id/navigation_viewOrders"
+        android:id="@+id/customer_navigation_upcoming_orders"
         android:icon="@drawable/ic_view_order_icon_24dp"
-        android:title="View Orders" />
+        android:title="Upcoming Orders" />
+
 </menu>

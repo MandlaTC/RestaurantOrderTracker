@@ -116,4 +116,34 @@ public class ApiCall {
 
     }
 
+    public static void getPastCustomerOrders(Context ctx, String customerID, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/customer.php?rType=pastOrders");
+        url.append("&customer=" + customerID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
+
+    public static void getUpcomingCustomerOrders(Context ctx, String customerID, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/customer.php?rType=currentOrders");
+        url.append("&customer=" + customerID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
+
+    public static void rateOrder(Context ctx, String orderID, int rating, Response.Listener<String>
+            listener, Response.ErrorListener errorListener) {
+        StringBuilder url = new StringBuilder("https://lamp.ms.wits.ac.za/home/s2303145/customer.php?rType=updateRating");
+        url.append("&rating=" + rating);
+        url.append("&order=" + orderID);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url.toString(),
+                listener, errorListener);
+        ApiCall.getInstance(ctx).addToRequestQueue(stringRequest);
+
+    }
 }

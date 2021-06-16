@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,20 +24,17 @@ import com.example.data_models.User;
 import com.example.model.ApiCall;
 import com.example.model.AuthRepository;
 import com.example.testrequests.R;
-import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ViewOrdersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.OnItemClickListener {
@@ -81,7 +77,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
     @org.jetbrains.annotations.Nullable
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_orders_fragment, container, false);
+        View view = inflater.inflate(R.layout.staff_view_orders_fragment, container, false);
         ordersRecyclerView = view.findViewById(R.id.view_orders_recycler_view);
         getStaffObject();
         makeStaffOrdersApiCall();
@@ -156,7 +152,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
                         }
                         staffOrderAdapter = new StaffOrderAdapter(orders);
                         ordersRecyclerView.setAdapter(staffOrderAdapter);
-                        staffOrderAdapter.setOnItemClickListener(ViewOrdersFragment.this);
+                        staffOrderAdapter.setOnItemClickListener(com.example.view.staff_fragments.ViewOrdersFragment.this);
                         ordersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     } catch (Exception e) {
                         e.printStackTrace();
