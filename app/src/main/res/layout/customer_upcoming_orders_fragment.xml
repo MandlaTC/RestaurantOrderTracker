@@ -29,7 +29,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/poppinsbold"
-                android:text="View Upcoming Orders Orders"
+                android:text="View Upcoming Orders"
                 android:textSize="25sp" />
 
             <TextView
@@ -75,7 +75,7 @@
             android:background="@drawable/button_back">
 
             <TextView
-                android:id="@+id/customer_logout_button"
+                android:id="@+id/customer_upcoming_orders_logout_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsbold"

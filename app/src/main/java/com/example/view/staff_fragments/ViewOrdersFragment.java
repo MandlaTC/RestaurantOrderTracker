@@ -180,11 +180,11 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
                     System.out.println(response);
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getInt("success") == 1) {
-                        Toast.makeText(getContext(), "Succesfully updated order status", Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), "Succesfully updated order status", Toast.LENGTH_SHORT).show();
 
                     } else {
 
-                        Toast.makeText(getContext(), "Failed to update status,try again later", Toast.LENGTH_SHORT);
+                        Toast.makeText(getContext(), "Failed to update status,try again later", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -213,7 +213,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
             updatedStatus = lastOrder;
         } else {
             updatedStatus = lastOrder;
-            Toast.makeText(getContext(), "Cannot update completed order", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Cannot update completed order", Toast.LENGTH_SHORT).show();
         }
         order.setOrderStatus(updatedStatus);
         staffOrderAdapter.notifyDataSetChanged();

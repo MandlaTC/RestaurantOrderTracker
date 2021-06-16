@@ -42,7 +42,7 @@ public class StaffOrderAdapter extends
         public TextView customerNameTextView;
         TextView createdAtTextView;
         TextView orderStatusTextView;
-        Button changeOrderStatusButton;
+        TextView changeOrderStatusButton;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview

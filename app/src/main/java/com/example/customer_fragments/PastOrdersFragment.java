@@ -43,6 +43,7 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
     List<Order> orders = new ArrayList<>();
     CustomerPastOrdersAdapter customerPastOrdersAdapter;
     RecyclerView pastOrdersRecyclerView;
+    TextView logOutButton;
 
     public PastOrdersFragment() {
         // Required empty public constructor
@@ -76,9 +77,19 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
         return view;
     }
 
+    private void setLogOutButton() {
+        logOutButton = getView().findViewById(R.id.customer_past_orders_logout_button);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AuthRepository.logOutUser(getContext());
+            }
+        });
+    }
 
     private void initViewItems() {
         successTextView = getView().findViewById(R.id.customer_past_orders_success_text_view);
+        setLogOutButton();
         getStaffObject();
     }
 
@@ -132,7 +143,7 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
             });
         } else {
             System.out.println("customer id is nul");
-            Toast.makeText(getContext(), "Missing staffID", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Missing staffID", Toast.LENGTH_SHORT).show();
         }
     }
 

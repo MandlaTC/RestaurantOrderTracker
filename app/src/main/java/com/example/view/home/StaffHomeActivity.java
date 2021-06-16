@@ -32,16 +32,6 @@ public class StaffHomeActivity extends FragmentActivity {
 
     }
 
-    public void setLogOutButton() {
-        logOutButton = findViewById(R.id.staff_logout_button);
-        logOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AuthRepository.logOutUser(context);
-            }
-        });
-    }
-
 
 
     public void initBottomNavBar() {
