@@ -18,8 +18,7 @@ public class Restaurant {
             String restaurantName = data.getString("restaurantName");
             return new Restaurant(restaurantID, restaurantName);
         } catch (JSONException e) {
-            System.out.println("in restaurant on map");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }

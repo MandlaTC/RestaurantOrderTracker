@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsbold"
                 android:padding="5dp"
-                android:text="Please select user type: " />
+                android:text="User type?" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -151,7 +151,6 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/poppinsbold"
                 android:gravity="center"
-                android:onClick="signUpRequest"
                 android:text="Sign Up"
                 android:textColor="#fff"
                 android:textSize="22dp" />
@@ -186,14 +185,7 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_login_back" />
+
 
     <ImageView
         android:id="@+id/imageView2"

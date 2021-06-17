@@ -31,6 +31,7 @@ public class StaffLoadingActivity extends AppCompatActivity {
     public void checkIfStaffHasRestaurantAndHandleNavigation() {
         User user = AuthRepository.getSavedUserFromPreference(this);
         ApiCall.doesStaffHaveRestaurant(this, user.id, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 Intent intent = new Intent(StaffLoadingActivity.this, StaffAddRestaurantActivity.class);

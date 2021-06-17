@@ -27,7 +27,6 @@ public class StaffHomeActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.staff_bottom_navigation_view);
         context = this;
-        getUser();
         initBottomNavBar();
 
     }
@@ -66,12 +65,6 @@ public class StaffHomeActivity extends FragmentActivity {
 
     }
 
-    public void getUser() {
-        User user = AuthRepository.getSavedUserFromPreference(context);
-        if (user != null) {
-            System.out.println(user.toString());
-        }
-    }
 
     void openFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

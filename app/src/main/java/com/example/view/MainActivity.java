@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     public User getUserObject() {
         User user = AuthRepository.getSavedUserFromPreference(context);
-        if (user != null)
-        System.out.println(user.toString());
         return  user;
 
 

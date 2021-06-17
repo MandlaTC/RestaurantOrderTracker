@@ -34,7 +34,8 @@ public class SignUpActivity extends AppCompatActivity {
     Context context;
     TextView signUpButton;
     Spinner userTypeSpinner;
-    public static String  firstSpinnerString = "Please select customer or staff";
+    public static String firstSpinnerString = "Please select customer or staff";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         context = this;
         errorTextView = findViewById(R.id.signUpErrorTextView);
         signUpButton = findViewById(R.id.signUpButton);
+        setButtonLoadingText(false);
         /*
          * Creating items for spinner object. Items incl. (user, staff)
          */
@@ -95,7 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
             signUpButton.setText("Loading");
             signUpButton.setOnClickListener(null);
         } else {
-            signUpButton.setText("Login");
+            signUpButton.setText("Sign Up");
             setSignUpButtonOnClick();
         }
 
@@ -132,11 +134,13 @@ public class SignUpActivity extends AppCompatActivity {
         String userType = userTypeSpinner.getSelectedItem().toString();
         if (!validateInputs(username, password, email, userType)) {
             errorTextView.setText("Missing fields for either username, password, email, or usertype");
+            setButtonLoadingText(false);
             return;
         }
+
         // Creating request object, username, password, email, userType parsed into request
         Request request = new Request.Builder()
-                .url("https://lamp.ms.wits.ac.za/home/s2303145/index.php?username="
+                .url("https://lamp.ms.wits.ac.za/home/s2303145/authentication.php?username="
                         + username + "&password=" + password
                         + "&email=" + email + "&userType=" + userType).build();
 
@@ -161,6 +165,8 @@ public class SignUpActivity extends AppCompatActivity {
              * On response the system print response data, and using UI thread navigateToHomePage()
              * method is called
              */
+            String message = "";
+
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 String jsonResponseData = response.body().string();
@@ -178,19 +184,19 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     } else {
                         setButtonLoadingText(false);
-                        errorTextView.setText(data.getString("message"));
-                        return;
+                        message = data.getString("message");
+
                     }
 
                 } catch (JSONException e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                     errorTextView.setText("Technical error, try again later.");
 
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //navigateToHomePage(view);
+                        errorTextView.setText(message);
                     }
                 });
             }

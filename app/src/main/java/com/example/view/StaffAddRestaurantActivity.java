@@ -138,7 +138,6 @@ public class StaffAddRestaurantActivity extends AppCompatActivity {
                         startActivity(intent);
                         return;
                     }
-                    System.out.println("server error");
                     errorTextView.setText("Failed to call the server, try again later");
                     setSubmitButtonLoading(false);
 

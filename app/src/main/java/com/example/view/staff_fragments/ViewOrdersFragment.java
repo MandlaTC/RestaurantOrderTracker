@@ -164,6 +164,7 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
                             System.out.println(order.toString());
                             orders.add(order);
                         }
+                        //Init the recycler view after the data has been fetched
                         staffOrderAdapter = new StaffOrderAdapter(orders);
                         ordersRecyclerView.setAdapter(staffOrderAdapter);
                         staffOrderAdapter.setOnItemClickListener(com.example.view.staff_fragments.ViewOrdersFragment.this);
@@ -180,8 +181,8 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
                 }
             });
         } else {
-            System.out.println("staff id is nul");
-            Toast.makeText(getContext(), "Missing staffID", Toast.LENGTH_SHORT);
+            System.out.println("staff id is null");
+            Toast.makeText(getContext(), "No user found, please reload the app and try again later", Toast.LENGTH_SHORT);
         }
     }
 
@@ -191,10 +192,9 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
             @Override
             public void onResponse(String response) {
                 try {
-                    System.out.println(response);
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getInt("success") == 1) {
-                        Toast.makeText(getContext(), "Succesfully updated order status", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Successfully updated order status", Toast.LENGTH_SHORT).show();
 
                     } else {
 
@@ -215,18 +215,17 @@ public class ViewOrdersFragment extends Fragment implements StaffOrderAdapter.On
     //change order
     @Override
     public void onItemClick(int position) {
-        System.out.println(position);
         String firstOrderState = "cooking";
         String secondOrderState = "collection";
-        String lastOrder = "completed";
+        String lastOrderState = "completed";
         Order order = orders.get(position);
         String updatedStatus = "";
         if (order.getOrderStatus().equals(firstOrderState)) {
             updatedStatus = secondOrderState;
         } else if (order.getOrderStatus().equals(secondOrderState)) {
-            updatedStatus = lastOrder;
+            updatedStatus = lastOrderState;
         } else {
-            updatedStatus = lastOrder;
+            updatedStatus = lastOrderState;
             Toast.makeText(getContext(), "Cannot update completed order", Toast.LENGTH_SHORT).show();
         }
         order.setOrderStatus(updatedStatus);

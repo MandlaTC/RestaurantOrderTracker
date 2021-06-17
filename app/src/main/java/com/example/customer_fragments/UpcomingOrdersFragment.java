@@ -108,7 +108,6 @@ public class UpcomingOrdersFragment extends Fragment {
 
 
     private void makeStaffOrdersApiCall() {
-        System.out.println("in staff Api call");
         if (customerID != null) {
             ApiCall.getUpcomingCustomerOrders(getContext(), customerID, new Response.Listener<String>() {
                 @RequiresApi(api = Build.VERSION_CODES.O)

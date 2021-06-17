@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         setButtonLoadingText(false);
-                        System.out.println(e.getMessage());
+                        e.printStackTrace();
                         errorTextView.setText("Technical error, try again later.");
 
                     }

@@ -184,6 +184,7 @@ public class AddOrderFragment extends Fragment {
         ApiCall.addNewOrder(getContext(), staffUsername, customerUsername, itemDescriptions, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                System.out.println(response);
                 //parsing logic, please change it as per your requirement
                 try {
                     if (response.contains("Failure")) {
@@ -242,7 +243,11 @@ public class AddOrderFragment extends Fragment {
     }
 
     public User getUserObject() {
-        return AuthRepository.getSavedUserFromPreference(getView().getContext());
+        User user =
+                AuthRepository.getSavedUserFromPreference(getView().getContext());
+        System.out.println(user.id);
+        return user;
+
     }
 
     public boolean validateInputs(String itemDescription, User selectedCustomerObject) {

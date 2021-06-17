@@ -52,11 +52,7 @@ public class User {
 
     }
 
-    public static ArrayList<User> getUserArrayFromStringedJsonData(String data) {
-        System.out.println("in user class, data: " + data);
 
-        return new ArrayList<>();
-    }
 
 
 }

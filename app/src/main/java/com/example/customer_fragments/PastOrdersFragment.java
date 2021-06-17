@@ -115,9 +115,7 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
                 public void onResponse(String response) {
                     //parsing logic, please change it as per your requirement
                     orders = new ArrayList<>();
-                    System.out.println("in on response");
                     try {
-                        System.out.println("server response" + response);
                         JSONArray array = new JSONArray(response);
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject jsonUser = array.getJSONObject(i);
@@ -142,7 +140,7 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
                 }
             });
         } else {
-            System.out.println("customer id is nul");
+            System.out.println("customer id is null in makeStaffOrdersAPICall");
             Toast.makeText(getContext(), "Missing staffID", Toast.LENGTH_SHORT).show();
         }
     }
@@ -152,7 +150,6 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
             @Override
             public void onResponse(String response) {
                 try {
-                    System.out.println("in order rating " + response);
                     JSONObject jsonResponse = new JSONObject(response);
                     if (jsonResponse.has("success")) {
                         int success = jsonResponse.getInt("success");
@@ -166,7 +163,6 @@ public class PastOrdersFragment extends Fragment implements CustomerPastOrdersAd
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-
                     Toast.makeText(getContext(), "Failed to update rating", Toast.LENGTH_SHORT).show();
                 }
             }
