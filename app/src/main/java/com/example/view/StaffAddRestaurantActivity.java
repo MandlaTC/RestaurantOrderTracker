@@ -21,13 +21,12 @@ import com.example.data_models.Restaurant;
 import com.example.data_models.User;
 import com.example.model.ApiCall;
 import com.example.model.AuthRepository;
-import com.example.testrequests.R;
+import com.example.orderTracker.R;
 import com.example.view.home.StaffHomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

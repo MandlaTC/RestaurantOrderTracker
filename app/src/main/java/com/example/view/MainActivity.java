@@ -12,9 +12,7 @@ import android.widget.ProgressBar;
 import com.example.app.Navigator;
 import com.example.data_models.User;
 import com.example.model.AuthRepository;
-import com.example.testrequests.R;
-
-import java.sql.SQLOutput;
+import com.example.orderTracker.R;
 
 public class MainActivity extends AppCompatActivity {
 

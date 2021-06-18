@@ -16,7 +16,7 @@ import com.example.customer_fragments.PastOrdersFragment;
 import com.example.customer_fragments.UpcomingOrdersFragment;
 import com.example.data_models.User;
 import com.example.model.AuthRepository;
-import com.example.testrequests.R;
+import com.example.orderTracker.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CustomerHomeActivity extends FragmentActivity {

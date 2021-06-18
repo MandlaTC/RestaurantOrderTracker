@@ -1,8 +1,6 @@
 package com.example.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app.DateFormatter;
 import com.example.data_models.Order;
-import com.example.testrequests.R;
+import com.example.orderTracker.R;
 
 import org.jetbrains.annotations.NotNull;
 

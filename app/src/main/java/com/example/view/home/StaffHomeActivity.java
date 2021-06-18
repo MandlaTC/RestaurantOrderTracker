@@ -8,12 +8,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
-import com.example.data_models.User;
-import com.example.model.AuthRepository;
-import com.example.testrequests.R;
+import com.example.orderTracker.R;
 import com.example.view.staff_fragments.AddOrderFragment;
 import com.example.view.staff_fragments.ViewOrdersFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
